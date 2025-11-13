@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Public Chat - DragonVR's Realm</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap');
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #0b0a0f 0%, #1a120b 80%);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #330b00;
+      padding: 1rem 2rem;
+      font-family: 'Anton', sans-serif;
+      color: #ff4500;
+      text-transform: uppercase;
+      font-size: 2.8rem;
+      letter-spacing: 4px;
+      box-shadow: inset 0 0 20px #ff4500;
+      user-select: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100px;
+    }
+    main {
+      flex-grow: 1;
+      max-width: 900px;
+      margin: 2rem auto 3rem;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: radial-gradient(circle at top center, #2b1200 0%, #0f0a04 90%);
+      border: 2px solid #ff4700;
+      border-radius: 16px;
+      box-shadow: 0 0 15px #ff5700cc;
+    }
+    h1 {
+      font-family: 'Anton', sans-serif;
+      font-size: 2.8rem;
+      text-align: center;
+      color: #ff6a00;
+      text-shadow:
+        0 0 10px #ff8c00,
+        0 0 20px #ff5e00,
+        0 0 30px #ff3c00;
+      margin: 1.5rem 0;
+      user-select: none;
+    }
+    #chatWindow {
+      background: #1a0b00;
+      border: 2px solid #ff4500;
+      border-radius: 12px;
+      height: 400px;
+      padding: 1rem;
+      overflow-y: auto;
+      font-size: 1rem;
+      color: #f0d8b4cc;
+      line-height: 1.4;
+      user-select: text;
+    }
+    #chatWindow .message {
+      margin-bottom: 0.8rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      background: rgba(255, 69, 0, 0.2);
+      box-shadow: 0 0 6px #ff4500aa;
+      word-wrap: break-word;
+    }
+    #chatWindow .message .username {
+      font-weight: 700;
+      color: #ff6a00;
+      margin-right: 0.5rem;
+      user-select: text;
+    }
+    form {
+      display: flex;
+      gap: 0.75rem;
+    }
+    #username {
+      flex: 0 0 140px;
+      border: 2px solid #ff4500;
+      border-radius: 25px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      outline: none;
+      background: #220900;
+      color: #fff;
+      user-select: text;
+      transition: border-color 0.3s ease;
+    }
+    #username:focus {
+      border-color: #ff6a00;
+      box-shadow: 0 0 10px #ff6a00;
+    }
+    #messageInput {
+      flex-grow: 1;
+      border: 2px solid #ff4500;
+      border-radius: 25px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      outline: none;
+      background: #220900;
+      color: #fff;
+      user-select: text;
+      transition: border-color 0.3s ease;
+    }
+    #messageInput:focus {
+      border-color: #ff6a00;
+      box-shadow: 0 0 10px #ff6a00;
+    }
+    #sendBtn {
+      background: #ff4500;
+      border: none;
+      border-radius: 25px;
+      padding: 0 1.5rem;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      box-shadow:
+        0 0 8px #ff4500,
+        0 0 15px #ff7500;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    #sendBtn:hover,
+    #sendBtn:focus {
+      background: #ff6a00;
+      box-shadow:
+        0 0 12px #ff6a00,
+        0 0 25px #ffa000;
+      outline: none;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      color: #aaa;
+      user-select: none;
+    }
+    footer a {
+      color: #ff4500;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #ff7a00;
+      text-shadow:
+        0 0 8px #ff7a00,
+        0 0 12px #ff4500;
+    }
+    @media (max-width: 600px) {
+      header {
+        font-size: 2rem;
+        min-height: 90px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      #chatWindow {
+        height: 300px;
+      }
+      #username {
+        flex: none;
+        width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header aria-label="Page header">Public Chat</header>
+  <main>
+    <h1>🔥 Join the DragonVR Chat 🔥</h1>
+    <div id="chatWindow" aria-live="polite" aria-relevant="additions" role="log" tabindex="0">
+      <!-- Chat messages show here -->
+    </div>
+    <form id="chatForm" aria-label="Send a message">
+      <input type="text" id="username" name="username" placeholder="Your name" aria-label="Username" maxlength="20" required />
+      <input type="text" id="messageInput" name="message" placeholder="Type your message..." aria-label="Message input" maxlength="200" required autocomplete="off" />
+      <button type="submit" id="sendBtn" aria-label="Send message button">Send</button>
+    </form>
+  </main>
+  <footer>
+    © 2025 DragonVR. All rights reserved. &nbsp;|&nbsp;
+    <a href="https://dragonmasterxxx.github.io/dragonvr-realm" aria-label="Back to homepage">Back to Home</a>
+  </footer>
+  <script>
+    // Simple public chat using localStorage (shared via Storage event) - note: works only within one browser profile and tabs, not real server chat
+    // For real worldwide chat, replace with WebSocket server integration
+
+    const chatWindow = document.getElementById('chatWindow');
+    const chatForm = document.getElementById('chatForm');
+    const usernameInput = document.getElementById('username');
+    const messageInput = document.getElementById('messageInput');
+
+    const CHAT_STORAGE_KEY = 'dragonvr_public_chat_messages';
+
+    // Load messages from localStorage
+    function loadMessages() {
+      const stored = localStorage.getItem(CHAT_STORAGE_KEY);
+      if (!stored) return [];
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return [];
+      }
+    }
+
+    // Save messages to localStorage
+    function saveMessages(messages) {
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
+    }
+
+    // Display messages
+    function renderMessages(messages) {
+      chatWindow.innerHTML = '';
+      for (const msg of messages) {
+        const div = document.createElement('div');
+        div.className = 'message';
+        const userSpan = document.createElement('span');
+        userSpan.className = 'username';
+        userSpan.textContent = msg.username + ':';
+        const textSpan = document.createElement('span');
+        textSpan.textContent = ' ' + msg.text;
+        div.appendChild(userSpan);
+        div.appendChild(textSpan);
+        chatWindow.appendChild(div);
+      }
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function addMessage(username, text) {
+      const messages = loadMessages();
+      const cleanUsername = username.trim().substring(0,20);
+      const cleanText = text.trim().substring(0, 200);
+      if (!cleanUsername || !cleanText) return;
+      const newMessage = {
+        username: cleanUsername,
+        text: cleanText,
+        timestamp: new Date().toISOString()
+      };
+      messages.push(newMessage);
+      // Keep only last 100 messages to limit size
+      if (messages.length > 100) messages.shift();
+      saveMessages(messages);
+      renderMessages(messages);
+    }
+
+    chatForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const username = usernameInput.value;
+      const message = messageInput.value;
+      if (!username || !message) return;
+      addMessage(username, message);
+      messageInput.value = '';
+      messageInput.focus();
+    });
+
+    // Listen for localStorage changes (chat messages from other tabs)
+    window.addEventListener('storage', (event) => {
+      if (event.key === CHAT_STORAGE_KEY) {
+        renderMessages(loadMessages());
+      }
+    });
+
+    // Load existing messages on page load
+    window.addEventListener('load', () => {
+      renderMessages(loadMessages());
+    });
+  </script>
+</body>
+</html>
+
+
+
