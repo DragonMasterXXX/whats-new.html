@@ -1,130 +1,401 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>What&apos;s New? - DragonVR&apos;s Realm</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Public Chat - DragonVR's Realm</title>
 
-  <!-- Favicon -->
-  <link rel="icon" href="https://i.imgur.com/Pv8RoDZ.png" type="image/png">
-  
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap');
-    body {
-      margin: 0;
-      background: linear-gradient(180deg, #0b0a0f 0%, #1a120b 80%);
-      color: #fff;
-      font-family: 'Montserrat', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      background: #330b00;
-      padding: 1rem 2rem;
-      font-family: 'Anton', sans-serif;
-      color: #ff4500;
-      text-transform: uppercase;
-      font-size: 2.8rem;
-      letter-spacing: 4px;
-      box-shadow:
-        inset 0 0 20px #ff4500;
-      user-select: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100px;
-    }
-    main {
-      flex-grow: 1;
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 0 1rem;
-    }
-    h1 {
-      font-family: 'Anton', sans-serif;
-      font-size: 2.8rem;
-      text-align: center;
-      color: #ff6a00;
-      text-shadow:
-        0 0 10px #ff8c00,
-        0 0 20px #ff5e00,
-        0 0 30px #ff3c00;
-      margin-bottom: 2rem;
-    }
-    section {
-      background: radial-gradient(circle at top center, #2b1200 0%, #0f0a04 90%);
-      border: 2px solid #ff4700;
-      border-radius: 16px;
-      padding: 1.5rem 2rem;
-      box-shadow: 0 0 15px #ff5700cc;
-      color: #f0d8b4cc;
-      line-height: 1.5;
-      font-size: 1.1rem;
-      user-select: text;
-    }
-    a.back-link {
-      display: inline-block;
-      margin-top: 2.5rem;
-      background: #ff4500;
-      color: #fff;
-      font-weight: 700;
-      font-family: 'Montserrat', sans-serif;
-      padding: 0.7rem 1.6rem;
-      border-radius: 50px;
-      box-shadow:
-        0 0 8px #ff4500,
-        0 0 15px #ff7500;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-      user-select: none;
-    }
-    a.back-link:hover,
-    a.back-link:focus {
-      background: #ff6a00;
-      box-shadow:
-        0 0 12px #ff6a00,
-        0 0 25px #ffa000;
-      outline: none;
-    }
-    @media (max-width: 600px) {
-      header {
-        font-size: 2rem;
-        min-height: 90px;
-      }
-      h1 {
-        font-size: 2rem;
-      }
-      section {
-        font-size: 1rem;
-        padding: 1rem 1.3rem;
-      }
-    }
-  </style>
+<link rel="icon" href="https://i.imgur.com/75ryOK9.png" type="image/png">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #0b0a0f 0%, #1a120b 80%);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+header {
+  background: #330b00;
+  padding: 1rem;
+  font-family: 'Anton', sans-serif;
+  color: #ff4500;
+  font-size: 2.5rem;
+  text-align: center;
+  text-shadow: 0 0 8px #ff4500; /* slight bloom effect */
+}
+
+main {
+  max-width: 900px;
+  margin: 1rem auto;
+  padding: 1rem;
+}
+
+#ownerLogin {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+#ownerLogin input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 20px;
+  border: 2px solid #ff4500;
+  background: #220900;
+  color: #fff;
+}
+
+#ownerLogin button {
+  background: #ff4500;
+  border: none;
+  border-radius: 20px;
+  padding: 0 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#chatWindow {
+  background: #1a0b00;
+  border: 2px solid #ff4500;
+  border-radius: 12px;
+  height: 500px;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.message {
+  margin-bottom: 0.7rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(255,69,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.message:hover .trash-btn {
+  display: inline;
+}
+
+.trash-btn {
+  display: none;
+  position: absolute;
+  right: 5px;
+  cursor: pointer;
+  color: #ff4500;
+}
+
+.owner-crown {
+  font-size: 1.1rem;
+  color: gold;
+  filter: drop-shadow(0 0 4px gold);
+}
+
+.username {
+  font-weight: 700;
+  color: #ff6a00;
+}
+
+form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+input {
+  padding: 0.5rem;
+  border-radius: 20px;
+  border: 2px solid #ff4500;
+  background: #220900;
+  color: #fff;
+}
+
+button {
+  background: #ff4500;
+  border: none;
+  border-radius: 20px;
+  padding: 0 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+footer {
+  background: #1a0b0b;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  font-size: 0.9rem;
+  color: #aaa;
+  box-shadow: inset 0 3px 15px #ff450050;
+}
+footer a {
+  color: #ff4500;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Join/Leave notification */
+.notification {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #220900;
+  border: 2px solid #ff4500;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  color: #fff;
+  font-weight: bold;
+  animation: slideFade 3s forwards;
+  z-index: 1000;
+}
+@keyframes slideFade {
+  0% {opacity: 0; transform: translate(-50%, -20px);}
+  10% {opacity: 1; transform: translate(-50%, 0);}
+  80% {opacity: 1; transform: translate(-50%, 0);}
+  100% {opacity: 0; transform: translate(-50%, -20px);}
+}
+
+/* Delete confirmation modal */
+#deleteModal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #1a0b00;
+  border: 2px solid #ff4500;
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  z-index: 2000;
+  width: 300px;
+  text-align: center;
+}
+#deleteModal p {
+  margin-bottom: 1rem;
+}
+#deleteModal button {
+  margin: 0 0.5rem;
+}
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
+
 <body>
-  <header aria-label="Page header">
-    What's New?
-  </header>
 
-  <main>
-    <h1>🔥 Latest Updates and Features 🔥</h1>
-    <section aria-label="What's New content">
-      <p>Welcome to the newest updates for DragonVR's Realm! We are constantly working to bring you more fiery merch, exciting events, and community features.</p>
-      <ul>
-        <li><strong>Improved Chat! Fixed Where You Can Only See Your Own Message! Now Everything Is Live!!</strong></li>
-        <li><strong>Added a Favicon!</strong></li>
-      </ul>
-      <p>We appreciate the continuous support from our incredible community! Stay Fired Up, Dragon Members!!! 🔥🔥🔥</p>
-    </section>
+<header>🔥 DragonVR Live Chat 🔥</header>
 
-    <a href="https://dragonmasterxxx.github.io/dragonvr-realm/" class="back-link" aria-label="Back to homepage">← Back to DragonVR's Realm</a>
-  </main>
+<main>
+  <!-- Owner login at the top -->
+  <div id="ownerLogin">
+    <input id="ownerPassword" placeholder="Owner Password" type="password" />
+    <button id="ownerLoginBtn">Login</button>
+  </div>
+
+  <!-- Chat display -->
+  <div id="chatWindow"></div>
+
+  <!-- Join username + message input -->
+  <form id="chatForm">
+    <input id="username" placeholder="Name" maxlength="20" required />
+    <input id="messageInput" placeholder="Message" maxlength="200" required />
+    <button type="submit">Send</button>
+  </form>
+</main>
+
+<!-- Delete confirmation modal -->
+<div id="deleteModal">
+  <p>Are you sure you want to delete this message?</p>
+  <button id="cancelDelete">Cancel</button>
+  <button id="confirmDelete">Delete</button>
+</div>
+
+<footer>
+  © 2025 DragonVR. All rights reserved. <a href="https://dragonmasterxxx.github.io/dragonvr-realm/">Back to Home</a>
+</footer>
+
+<script>
+// ---------------- CONFIG ----------------
+const OWNER_NAME = "DragonVR";
+const OWNER_PASSWORD = "Dragon-IS-A-LEGEND!!!"; // Your owner password
+const COOLDOWN_MS = 3000;
+const profanity = ["fuck","shit","bitch","asshole","dick","nigga","nigger","motherfucker","fucker","nigget"];
+
+// ---------------- FIREBASE ----------------
+firebase.initializeApp({
+  apiKey: "AIzaSyDIjJYvHsSKg3IRHlmynXFmfPri98nrtLU",
+  authDomain: "dragonvr-s-realm-d91d0.firebaseapp.com",
+  databaseURL: "https://dragonvr-s-realm-d91d0-default-rtdb.firebaseio.com",
+  projectId: "dragonvr-s-realm-d91d0"
+});
+const db = firebase.database();
+const messagesRef = db.ref("chatMessages");
+const usersRef = db.ref("chatUsers"); // for join/leave notifications
+
+// ---------------- DOM ----------------
+const chatWindow = document.getElementById("chatWindow");
+const chatForm = document.getElementById("chatForm");
+const usernameInput = document.getElementById("username");
+const messageInput = document.getElementById("messageInput");
+const ownerPasswordInput = document.getElementById("ownerPassword");
+const ownerLoginBtn = document.getElementById("ownerLoginBtn");
+const deleteModal = document.getElementById("deleteModal");
+const cancelDeleteBtn = document.getElementById("cancelDelete");
+const confirmDeleteBtn = document.getElementById("confirmDelete");
+
+let lastMessageTime = 0;
+let isOwner = false;
+let messageToDeleteKey = null;
+
+// ---------------- HELPERS ----------------
+function cleanText(text) {
+  profanity.forEach(w => text = text.replace(new RegExp(w,"gi"), "****"));
+  return text;
+}
+
+function showNotification(text) {
+  const notif = document.createElement("div");
+  notif.className = "notification";
+  notif.textContent = text;
+  document.body.appendChild(notif);
+  setTimeout(() => notif.remove(), 3000);
+}
+
+// ---------------- OWNER LOGIN ----------------
+ownerLoginBtn.addEventListener("click", () => {
+  if(ownerPasswordInput.value === OWNER_PASSWORD){
+    isOwner = true;
+    ownerPasswordInput.value = "";
+    showNotification("Owner privileges enabled!");
+  } else {
+    showNotification("Incorrect password!");
+  }
+});
+
+// ---------------- PERSISTENT USERNAME ----------------
+const savedUsername = localStorage.getItem("chatUsername");
+if(savedUsername) usernameInput.value = savedUsername;
+usernameInput.addEventListener("change", () => {
+  localStorage.setItem("chatUsername", usernameInput.value.trim());
+});
+
+// ---------------- DISPLAY ----------------
+function addMessage(msg, key){
+  if(!msg || !msg.username || !msg.text) return;
+
+  const div = document.createElement("div");
+  div.className = "message";
+  div.dataset.key = key;
+
+  if(msg.isOwner) {
+    const crown = document.createElement("span");
+    crown.className = "owner-crown";
+    crown.textContent = "👑";
+    div.appendChild(crown);
+  }
+
+  const user = document.createElement("span");
+  user.className = "username";
+  user.textContent = msg.username + ":";
+
+  const text = document.createElement("span");
+  text.textContent = " " + msg.text;
+
+  // Trash button
+  const trashBtn = document.createElement("span");
+  trashBtn.className = "trash-btn";
+  trashBtn.textContent = "🗑️";
+  trashBtn.addEventListener("click", () => {
+    if(isOwner || msg.username === usernameInput.value.trim()){
+      messageToDeleteKey = key;
+      deleteModal.style.display = "block";
+    }
+  });
+
+  div.append(user, text, trashBtn);
+  chatWindow.appendChild(div);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+// ---------------- JOIN/LEAVE ----------------
+function joinChat(username){
+  usersRef.child(username).set(true);
+  showNotification(`${username} has joined the chat!`);
+}
+function leaveChat(username){
+  usersRef.child(username).remove();
+  showNotification(`${username} has left the chat!`);
+}
+
+// ---------------- LISTENERS ----------------
+window.addEventListener("beforeunload", () => {
+  const username = usernameInput.value.trim();
+  if(username) leaveChat(username);
+});
+
+messagesRef.orderByChild('time').on('child_added', snap => addMessage(snap.val(), snap.key));
+messagesRef.on('child_removed', snap => {
+  const div = chatWindow.querySelector(`[data-key='${snap.key}']`);
+  if(div) div.remove();
+});
+
+// ---------------- SEND ----------------
+chatForm.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const now = Date.now();
+  const username = usernameInput.value.trim();
+  let text = cleanText(messageInput.value.trim());
+  if(!username || !text) return;
+
+  if(!isOwner && now - lastMessageTime < COOLDOWN_MS) return;
+
+  if(isOwner && text === "/clear"){
+    messagesRef.remove();
+    chatWindow.innerHTML = "";
+    messageInput.value = "";
+    return;
+  }
+
+  messagesRef.push({
+    username,
+    text,
+    isOwner,
+    time: now
+  });
+
+  messageInput.value = "";
+  lastMessageTime = now;
+});
+
+// ---------------- DELETE MODAL ----------------
+cancelDeleteBtn.addEventListener("click", () => {
+  deleteModal.style.display = "none";
+  messageToDeleteKey = null;
+});
+confirmDeleteBtn.addEventListener("click", () => {
+  if(messageToDeleteKey){
+    messagesRef.child(messageToDeleteKey).remove();
+    messageToDeleteKey = null;
+  }
+  deleteModal.style.display = "none";
+});
+
+// ---------------- USER JOIN ----------------
+const username = usernameInput.value.trim();
+if(username) joinChat(username);
+usernameInput.addEventListener("change", () => {
+  const oldUsername = username;
+  const newUsername = usernameInput.value.trim();
+  if(oldUsername) leaveChat(oldUsername);
+  if(newUsername) joinChat(newUsername);
+});
+</script>
+
 </body>
 </html>
-
-
-
-
